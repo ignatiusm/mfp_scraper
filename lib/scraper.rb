@@ -1,17 +1,30 @@
-require 'httparty'
 require 'nokogiri'
 require 'open-uri'
+require 'to_words'
 
-class Scraper
+def scraper
+  base_url = "https://www.musicforprogramming.net/"
+  doc = Nokogiri::HTML(open(base_url))
 
-attr_accessor :parse_page
+	episodes = doc.css("div#episodes a")
 
-	def initialize
-		doc = HTTParty.get("https://musicforprogramming.net/")
-		parse_page ||= Nokogiri::HTML(doc)
-	end
+  length = episodes.length
 
-	episodes = parse_page.css("div#episodes").children.map{ |link| link.values}
+  (1..length).step(1) do |l|
+    url = base_url + "?" + l.to_words
+    page = Nokogiri::HTML(open(url))
+    filename = page.css("#player")[0]["src"]
 
-puts episodes
+    if File.exist?("#{Dir.home}/Music/" + filename[/(?=music_for_programming).*/]) 
+      puts "#{filename} already downloaded"
+    else
+      puts "downloading..."
+      File.open("#{Dir.home}/Music/" + filename[/(?=music_for_programming).*/], "wb") do |file|
+      file.write open(filename).read
+      end
+      puts "#{filename} downloaded"
+    end
+  end
 end
+
+scraper
