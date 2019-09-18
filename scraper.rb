@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'nokogiri'
 require 'open-uri'
 require 'to_words'
@@ -11,7 +13,7 @@ def scraper
   length = episodes.length
 
   (1..length).step(1) do |l|
-    url = base_url + "?" + l.to_words
+    url = base_url + "?" + l.to_words.gsub(/\s+/, '')
     page = Nokogiri::HTML(open(url))
     filename = page.css("#player")[0]["src"]
 
