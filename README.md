@@ -8,3 +8,10 @@ I wanted to write a small scraping script for three reasons:
 3. I wanted to learn how to write a small scraping script in Ruby.
 
 As there are occasionally new tracks added to the site, I have set up a cron job to run this script periodically.
+
+To run:
+
+- Download ruby,
+- clone this repository,
+- cd into the mfp_scraper directory,
+- from your terminal enter `./scraper.rb` to execute the script.
